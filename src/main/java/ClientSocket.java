@@ -12,7 +12,9 @@ public class ClientSocket {
 
         BufferedReader in = null;
         PrintWriter out = null;
-        try(Socket clientSocket = new Socket(host,port)){
+        Socket clientSocket = null;
+        try{
+            clientSocket = new Socket(host,port);
             in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
             out = new PrintWriter(clientSocket.getOutputStream(),true);
             out.println("GET/HTTP/1.1 \n"+"Host: netology.ru");
@@ -24,9 +26,14 @@ public class ClientSocket {
         }
         finally {
             try {
-                if(in != null && out !=null){
+                if(in != null){
                     in.close();
+                }
+                if(out!=null){
                     out.close();
+                }
+                if(clientSocket!=null){
+                    clientSocket.close();
                 }
             }
             catch (IOException ex){
